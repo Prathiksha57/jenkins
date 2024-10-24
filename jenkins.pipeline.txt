@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                git url: 'https://your-repo-url.git'
+                sh 'mvn clean install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'scp target/*.war user@server-ip:/path/to/deploy'
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            echo 'Build or deployment failed!'
+        }
+    }
+}
